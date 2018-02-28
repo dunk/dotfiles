@@ -1,0 +1,163 @@
+# This file contains useful bash aliases, functions and autocompletions.
+# run dh to show available options
+
+function dh() {
+    echo "Available docker commands:
+--------
+
+Containers
+----
+dp        list all running containers
+dpa       list all containers, running or not
+dpn       list all not running containers
+drm       remove a specified container
+drma      remove all containers
+de        drop into a shell on a container
+dv        list all volumes
+dvrm      remove a volume
+drun      run an ephemeral ubuntu container
+dfailed   examine a failed container
+dwn       watch not running containers
+
+Images
+----
+di        list all images
+dirm      remove a specified image
+dh        show the history for an image
+dr        run an image in an ephemeral container
+dcln      clean up orphaned images with no tag
+
+Assorted
+----
+dstat     show statistics across all containers
+dtop      show processes across all containers"
+}
+
+
+DOCKER_PSFORMAT='table {{.Names}}\t{{.Image}}\t{{.ID}}\t{{.Status}}\t{{.CreatedAt}}'
+DOCKER_PSFORMAT_NAMES_ONLY='{{.Names}}'
+
+# A few useful aliases
+alias d='docker'
+alias di='docker images'
+alias dirm='docker rmi'
+alias fig='docker-compose'
+alias dhst='docker history'
+alias dv='docker volume ls'
+alias dvrm='docker volume rm'
+
+function dp() {
+    docker ps --format "$DOCKER_PSFORMAT" "$@"
+}
+
+function dpa() {
+    dp -a
+}
+
+function dpn() {
+    dp --filter 'status=exited' "$@"
+}
+
+# Remove container, and clean up volumes so that they are not orphaned
+alias drm='docker rm -v'
+
+# Helper to grab all container names as a string
+function docker_container_names() {
+    docker ps -a --format "$DOCKER_PSFORMAT_NAMES_ONLY" | xargs
+}
+
+# Kill off and remove all containers; A fresh slate
+function drma() {
+    docker kill $(docker_container_names)
+    docker rm -v $(docker_container_names)
+}
+
+# Clean up untagged images
+function dcln() {
+    docker rmi $(docker images | grep "^<none>" | tr -s " " | cut -d" " -f3)
+}
+
+# Run a quick, ephemeral ubuntu container
+alias drun='docker run -it --rm ubuntu bash'
+
+# Container statistics across all containers
+function dstat() {
+    docker stats $(docker_container_names)
+}
+
+# Container processes across all containers
+function dtop() {
+    for container in $(docker_container_names); do
+        echo "*************** {{$container}} ****************"
+        docker top $container
+        echo -e "\n"
+    done
+}
+
+# Drop into a shell on a container
+function de() {
+    docker exec -it $* bash
+}
+
+# Strip the history out of an image. Seldom needed.
+function docker_flatten() {
+    ID=$(docker run -d $1 /bin/bash)
+    docker export $ID | docker import – $2
+    docker kill $ID
+    docker rm -v $ID
+}
+
+# Get the ip address of a particular container
+function dip() {
+    local network
+    network='pipeline_pipelinenet'
+    docker inspect --format "{{ .NetworkSettings.Networks.$network.IPAddress }}" "$@"
+}
+
+# Get the ip addresses of all containers
+function dipall() {
+    for container_name in $(docker_container_names);
+    do
+        local container_ip=$(dip $container_name)
+        if [[ -n "$container_ip" ]]; then
+            echo $(dip $container_name) " $container_name"
+        fi
+    done | sort -t . -k 3,3n -k 4,4n
+}
+
+# Run an image
+dr() {
+    docker run -it --rm $1 bash
+}
+
+function dfailed() {
+    local container
+    container=$(docker commit $1 container_as_image)
+    dr $container
+}
+
+function dwn() {
+    watch -n 1 "docker ps --format 'table {{.Names}}\t{{.Status}}' --filter 'status=exited'"
+}
+
+# Hardcode container names for performance (it's sluggish otherwise which impacts the interactive experience)
+CONTAINERS='container1 container2 container3'
+
+function _docker_container_name() {
+    local current_arg
+    #local options
+    current_arg="${COMP_WORDS[COMP_CWORD]}"
+    #options=($( docker ps -a --format "{{.Names}}" ))
+    # The delay contacting docker for this is annoying, and it's a static list for the most part anyways
+    #COMPREPLY=( $(compgen -W "$(docker ps -a --format '{{.Names}}')" -- "${current_arg}") )
+    COMPREPLY=( $(compgen -W "$CONTAINERS" -- "${current_arg}") )
+}
+
+function _docker_image_name() {
+    current_arg="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -W "$(docker images | tr -s ' ' | cut -d ' ' -f1,2 | sed 's/ /:/' | tail -n +2 | xargs)" -- "${current_arg}") )
+}
+
+# Apply the autocompletion to the relevant commands
+for container in drm de dip; do complete -F _docker_container_name $container; done
+for image in dirm dr dh docker_flatten; do complete -F _docker_image_name $image; done

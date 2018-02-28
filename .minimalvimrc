@@ -1,0 +1,52 @@
+set encoding=utf-8
+set nocompatible
+syntax on
+set hlsearch ignorecase smartcase incsearch " Configure search
+set expandtab tabstop=4 shiftwidth=4 " Configure indenting
+set number relativenumber " Configure line numbering
+set noerrorbells ruler hidden showcmd " Configure general things
+set backspace=indent,eol,start
+set wildchar=<Tab> wildmenu wildmode=full wildcharm=<c-z> wildignore+=*.pyc
+
+let mapleader=" "
+let maplocalleader=","
+
+" Various useful mappings
+nnoremap <c-l> :let @/ = ""<CR>
+nnoremap <c-j> <c-e>
+nnoremap <c-k> <c-y>
+nnoremap <c-h> :e#<CR>
+nnoremap <c-o> :only<CR>
+nnoremap <c-f> <c-f>zz
+nnoremap <c-b> <c-b>zz
+inoremap jk <esc>
+vnoremap jk <esc>
+
+" Show the cursor line
+set cursorline
+highlight CursorLine guibg=#303030
+
+" Show max width in python files
+autocmd Filetype python set colorcolumn=120
+autocmd Filetype python highlight ColorColumn ctermbg=5
+
+" Minimal plugins
+call plug#begin('~/.vim/plugged')
+    Plug 'scrooloose/nerdtree' " View files more easily
+    Plug 'jlanzarotta/bufexplorer' " View buffers more easily
+    Plug 'majutsushi/tagbar' " View classes more easily
+    Plug 'gorkunov/smartpairs.vim' " Smarter selection
+    Plug 'tpope/vim-commentary' " Smarter commenting
+call plug#end()
+
+nnoremap <c-d> :NERDTree<CR>
+
+nnoremap <c-s> :BufExplorerHorizontalSplit<CR>
+let g:bufExplorerSplitBelow=1
+let g:bufExplorerSplitHorzSize=10
+let g:bufExplorerSplitOutPathName=0
+let g:bufExplorerShowRelativePath=1
+let g:bufExplorerDefaultHelp=0
+let g:bufExplorerDisableDefaultKeyMapping=1
+
+nnoremap <c-c> :TagbarToggle<CR>

@@ -1,0 +1,58 @@
+[user]
+    name = Duncan Gordon
+    email = github@duncang.com
+ [credential]
+     helper = osxkeychain
+[core]
+    pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
+    excludesfile = /Users/dunk/.gitignore_global
+[color]
+    ui = auto
+[color "diff"]
+    meta = blue
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[difftool "sourcetree"]
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path = 
+[mergetool "sourcetree"]
+    cmd = /opt/homebrew-cask/Caskroom/sourcetree/2.2.4/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
+[pull]
+    rebase = true
+[merge]
+     conflictstyle = diff3
+[alias]
+    fp = fetch --prune
+    ca = commit --amend --no-edit
+    co = checkout
+    cb = checkout -b
+    st = status --short
+    sh = show
+    graph = log --graph --all --decorate --stat --date=iso
+    b = branch --all -vv
+    sl = stash list
+    l = log --oneline -10
+    ll = log
+    gr = log --graph --oneline --all
+    bd = branch -D
+    bdo = push origin --delete
+    su = submodule update --init
+    staash = stash --include-untracked
+    cane = commit --amend --no-edit
+
+    lg = !"git lg1"
+    lg1 = !"git lg1-specific --all"
+    lg2 = !"git lg2-specific --all"
+    lg3 = !"git lg3-specific --all"
+
+    lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+    lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+    lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
+[commit]
+    verbose = true
+[filter "lfs"]
+    clean = git-lfs clean %f
+    smudge = git-lfs smudge %f
+    required = true

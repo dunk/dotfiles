@@ -1,0 +1,160 @@
+#function dpn() {
+    #docker ps -a | head -1
+    #local CONTAINERS="$(diff --unchanged-group-format= --changed-group-format=%\>  <(dp -q | sort) <(dpa -q | sort) | tr '\n' '|' | sed 's/.$//')"
+    #if [ -z $CONTAINERS ]; then
+    #    return
+    #fi
+    #docker ps -a | egrep "($CONTAINERS)"
+#}
+
+export DOCKER_TLS_VERIFY="1"
+export DOCKER_HOST="tcp://192.168.99.100:2376"
+export DOCKER_CERT_PATH="/Users/dunk/.docker/machine/machines/dev"
+export DOCKER_MACHINE_NAME="dev"
+
+DOCKER_PSFORMAT='table {{.Names}}\t{{.Image}}\t{{.ID}}\t{{.Command}}\t{{.Status}}'
+DOCKER_PSFORMAT_NAMES_ONLY='{{.Names}}'
+
+alias d='docker'
+alias di='docker images'
+alias dirm='docker rmi'
+alias fig='docker-compose'
+
+function dp() {
+    docker ps --format "$DOCKER_PSFORMAT" "$@"
+}
+
+function dpa() {
+    dp -a
+}
+
+function dpn() {
+    dp --filter 'status=exited'
+}
+
+# Remove container, and clean up volumes so that they are not orphaned
+alias drm='docker rm -v'
+
+function docker_container_names() {
+    docker ps -a --format "$DOCKER_PSFORMAT_NAMES_ONLY" | xargs
+}
+
+function drma() {
+    docker kill $(docker_container_names)
+    docker rm -v $(docker_container_names)
+}
+
+alias dh='docker history'
+
+# Clean up untagged images
+function dcln() {
+    docker rmi $(docker images | grep "^<none>" | tr -s " " | cut -d" " -f3)
+}
+
+# Run a quick, ephemeral ubuntu container
+alias drun='docker run -it --rm ubuntu bash'
+
+# Container statistics across all containers
+function dstat() {
+    docker stats $(docker_container_names)
+}
+
+# Container processes across all containers
+function dtop() {
+    for container in $(docker_container_names); do
+        echo "*************** {{$container}} ****************"
+        docker top $container
+        echo -e "\n"
+    done
+}
+
+# Drop into a shell on a container
+function de() {
+    docker exec -it $* bash
+}
+
+# Strip the history out of an image. Seldom needed.
+function docker_flatten() {
+    ID=$(docker run -d $1 /bin/bash)
+    docker export $ID | docker import – $2
+    docker kill $ID
+    docker rm -v $ID
+}
+
+# Get the ip address of a particular container
+dip() {
+    local network
+    network='pipeline'
+    docker inspect --format "{{ .NetworkSettings.Networks.$network.IPAddress }}" "$@"
+}
+
+# Get the ip addresses of all containers
+dipall() {
+    for container_name in $(docker_container_names);
+    do
+        local container_ip=$(dip $container_name)
+        if [[ -n "$container_ip" ]]; then
+            echo $(dip $container_name) " $container_name"
+        fi
+    done | sort -t . -k 3,3n -k 4,4n
+}
+
+# Run an image
+dr() {
+    docker run -it --rm $1 bash
+}
+
+CONTAINERS='auditor deliveryapiconsumer sgeserver rabbit deliveryapi deliverydb orchestrator sampletrackingdb web sgeconsumer'
+
+function _docker_container_name() {
+    local current_arg
+    #local options
+    current_arg="${COMP_WORDS[COMP_CWORD]}"
+    #options=($( docker ps -a --format "{{.Names}}" ))
+    # The delay contacting docker for this is annoying, and it's a static list for the most part anyways
+    #COMPREPLY=( $(compgen -W "$(docker ps -a --format '{{.Names}}')" -- "${current_arg}") )
+    COMPREPLY=( $(compgen -W "$CONTAINERS" -- "${current_arg}") )
+}
+
+function _docker_image_name() {
+    current_arg="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -W "$(docker images | tr -s ' ' | cut -d ' ' -f1,2 | sed 's/ /:/' | tail -n +2 | xargs)" -- "${current_arg}") )
+}
+
+complete -F _docker_container_name drm
+complete -F _docker_container_name de
+complete -F _docker_container_name dip
+
+complete -F _docker_image_name dirm
+complete -F _docker_image_name dr
+complete -F _docker_image_name dh
+complete -F _docker_image_name docker_flatten
+
+function dhelp() {
+    echo "Available docker commands:
+--------
+
+Containers
+----
+dp        list all running containers
+dpa       list all containers, running or not
+dpn       list all not running containers
+drm       remove a specified container
+drma      remove all containers
+de        drop into a shell on a container
+drun      run an ephemeral ubuntu container
+
+Images
+----
+di        list all images
+dirm      remove a specified image
+dh        show the history for an image
+dr        run an image in an ephemeral container
+dcln      clean up orphaned images with no tag
+
+Assorted
+----
+dstat     show statistics across all containers
+dtop      show processes across all containers"
+}
+

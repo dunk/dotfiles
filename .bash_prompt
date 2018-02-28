@@ -1,0 +1,47 @@
+export GIT_PS1_SHOWUPSTREAM="verbose"
+export GIT_PS1_SHOWDIRTYSTATE=true
+
+NO_COLOUR='\e[0;0m'
+RED='\e[0;31m'
+GREEN='\e[0;32m'
+YELLOW='\e[0;33m'
+BLUE='\e[0;34m'
+PURPLE='\e[0;35m'
+CYAN='\e[0;36m'
+
+function timer_start {
+  timer=${timer:-$SECONDS}
+}
+
+function timer_stop {
+  timer_show=$(($SECONDS - $timer))
+  unset timer
+}
+
+trap 'timer_start' DEBUG
+
+function coloured() {
+    local arg_1="$1"
+    echo "${!arg_1}$2${NO_COLOUR}"
+}
+
+function bracketed() {
+    echo "${RED}{${NO_COLOUR}$1${RED}}${NO_COLOUR}"
+}
+
+PROMPT_COMMAND="timer_stop"
+
+function get_prompt() {
+    local USER="$(coloured CYAN '\u')"
+    local AT="$(coloured RED '@')"
+    local HOST="$(coloured GREEN '\h')"
+    local DIR="$(bracketed $(coloured PURPLE '\w'))"
+    local JOBS="$(bracketed $(coloured YELLOW '\j'))"
+    local HIST="$(bracketed $(coloured YELLOW '\!'))"
+    local TIME="$(bracketed $(coloured YELLOW '\t'))"
+    local DURATION="$(bracketed $(coloured YELLOW '${timer_show}s'))"
+    local GIT="$(coloured BLUE '$(__git_ps1)')"
+    export PS1="${USER}${AT}${HOST}  ${DIR} ${JOBS} ${HIST} ${TIME} ${DURATION} ${GIT}\n\$ "
+}
+
+get_prompt ${timer_show}
