@@ -41,6 +41,7 @@
     su = submodule update --init
     staash = stash --include-untracked
     cane = commit --amend --no-edit
+    files = show --pretty="" --name-only
 
     lg = !"git lg1"
     lg1 = !"git lg1-specific --all"
