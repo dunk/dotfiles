@@ -6,6 +6,7 @@ shopt -s histappend
 shopt -s nocaseglob
 
 [ -f /etc/bash_completion ] && source /etc/bash_completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 
 source ~/.bash_local
 source ~/.bash_prompt
