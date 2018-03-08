@@ -1,7 +1,4 @@
-[user]
-    name = Duncan Gordon
-    email = github@duncang.com
- [credential]
+[credential]
      helper = osxkeychain
 [core]
     pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
