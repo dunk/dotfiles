@@ -1,0 +1,29 @@
+# Make the basic environment nicer
+coreutils
+bash-completion
+gnu-sed
+
+# Some useful programs not installed by default
+tree
+htop
+nmap
+watch
+fd
+tldr
+
+# Apps
+todo-txt
+
+# Programming
+python@2
+the_silver_searcher
+tmux
+fzf
+jq
+universal-ctags
+
+# Git
+git
+patchutils
+colordiff
+tig
