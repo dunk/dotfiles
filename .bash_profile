@@ -29,9 +29,6 @@ stty -ixon
 # Make vim the default editor
 export EDITOR="vim"
 
-# Always enable colored `grep` output
-export GREP_OPTIONS="--color=auto"
-
 export HISTCONTROL=ignoreboth
 export HISTIGNORE="bg*:fg*:j:l:ll:ls:ls -hal:h:ht:history:gh*:du*:tree:vim:python:cd ..:cd:cd -:ps aux:+:-"
 export HISTFILESIZE=100000000000
@@ -68,10 +65,6 @@ alias ht='history | tail -20'
 alias dusk='du -msc * | sort -rn'
 alias +='pushd .'
 alias _='popd'
-
-if hash ack-grep 2>/dev/null; then
-    alias ack='ack-grep -i'
-fi
 
 # Easier navigation: .., ..., ...., ....., ~ and -
 alias ..='cd ..'
@@ -134,10 +127,6 @@ alias opc='ssh -p 2222 localhost'
 alias fg-='fg -'
 
 alias cdd='cd ~/Downloads'
-
-function grepsrc() {
-    find . -name .svn -prune -or -print0 | xargs -r0 grep -Hi --color -C 5 "$1"
-}
 
 #grep for a string in the source files, then for all files which match grep for a second string within them
 function ggrep() {
