@@ -80,7 +80,6 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias -- -='cd -'
 
-# Shortcuts
 alias g='git'
 alias v='vim'
 
@@ -133,6 +132,8 @@ alias co='git checkout'
 alias opc='ssh -p 2222 localhost'
 
 alias fg-='fg -'
+
+alias cdd='cd ~/Downloads'
 
 function grepsrc() {
     find . -name .svn -prune -or -print0 | xargs -r0 grep -Hi --color -C 5 "$1"
@@ -276,3 +277,16 @@ function gmake() {
 function which() {
     ls -l $(/usr/bin/which $1)
 }
+
+function pwf {
+  echo "$PWD/$1"
+}
+
+function o {
+  open ${@:-'.'}
+}
+
+function find_by_extension {
+  find . -name "*.${1}"
+}
+alias fe='find_by_extension'
