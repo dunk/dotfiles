@@ -7,10 +7,8 @@ shopt -s nocaseglob
 
 [ -f /etc/bash_completion ] && source /etc/bash_completion
 
-for file in ~/.{bash_local,bash_prompt}; do
-    [ -r "$file" ] && source "$file"
-done
-unset file
+source ~/.bash_local
+source ~/.bash_prompt
 
 for f in ~/.bash_complete/*; do source $f; done
 
