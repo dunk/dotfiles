@@ -1,78 +1,9 @@
-" Allow non-vi stuff
-set nocompatible
+set nocompatible encoding=utf-8 directory=~/.vim/tmp backup backupdir=~/.vim/backup undofile undodir=~/.vim/undo hlsearch ignorecase smartcase expandtab tabstop=4 shiftwidth=4 incsearch number relativenumber noerrorbells ruler hidden showcmd background=dark cursorline wildchar=<Tab> wildmenu wildmode=full wildcharm=<c-z> wildignore+=*.pyc background=dark backspace=indent,eol,start
 
-call plug#begin('~/.vim/plugged')
-    Plug 'airblade/vim-gitgutter'
-    Plug 'scrooloose/syntastic'
-    Plug 'nvie/vim-flake8'
-    Plug 'tpope/vim-fugitive'
-    Plug 'mileszs/ack.vim'
-    Plug 'gorkunov/smartpairs.vim'
-    Plug 'scrooloose/nerdtree'
-    Plug 'jlanzarotta/bufexplorer'
-    Plug 'majutsushi/tagbar'
-    Plug 'tpope/vim-commentary'
-    Plug 'AndrewRadev/splitjoin.vim'
-    Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-    Plug 'ekalinin/Dockerfile.vim'
-    Plug 'tpope/vim-dispatch'
-    Plug 'alfredodeza/pytest.vim'
-    Plug 'fisadev/vim-isort'
-    Plug 'kana/vim-textobj-user'
-    Plug 'bps/vim-textobj-python'
-    Plug 'plasticboy/vim-markdown'
-call plug#end()
-
-set encoding=utf-8
-
-set directory=~/.vim/tmp
-set backup
-set backupdir=~/.vim/backup
-set undofile
-set undodir=~/.vim/undo
-
-" Syntax highlighting on
 syntax on
+colorscheme dunk
+hi CursorLine guibg=#303030
 
-" Highlight searches by default
-set hlsearch
-
-" Ignore case when searching with a lowercase string
-set ignorecase smartcase
-
-" Expand tabs into spaces
-set expandtab
-
-" Number of spaces a <tab> counts for
-set tabstop=4
-
-" Reindent (<<, >>) and automatic c-style indentation columns
-set shiftwidth=4
-
-" Search as you type
-set incsearch
-
-" Line numbers on
-set number
-
-" Number lines relatively to cursor line
-set relativenumber
-
-" Turn error bells off
-set noerrorbells
-
-" Show line and column number of cursor position
-set ruler
-
-" Allow hidden buffers with unsaved changes
-set hidden
-
-" Show (partial) command in the last line of the screen.
-set showcmd
-
-set clipboard=unnamed
-
-" Set leader key
 let mapleader=" "
 let maplocalleader=","
 
@@ -80,12 +11,8 @@ let maplocalleader=","
 inoremap jk <esc>
 inoremap <esc> <nop>
 
-" Nuke the current search, so that the display is clear again
+" Clear the current search (useful because hlsearch is on)
 nnoremap <c-l> :let @/ = ""<CR>
-
-" Scroll the viewport using keys analogous to movement in normal mode
-nnoremap <c-j> <c-e>
-nnoremap <c-k> <c-y>
 
 " Flashback last buffer
 nnoremap <c-h> :e#<CR>
@@ -93,46 +20,64 @@ nnoremap <c-h> :e#<CR>
 " Discard other windows
 nnoremap <c-o> :only<CR>
 
-" Jump to next and previous whitespace
-nnoremap <leader>j }
-nnoremap <leader>k {
-
-nmap <c-p> [pf
-nmap <c-n> ]pf
+" Scroll the viewport
+nnoremap <c-j> <c-e>
+nnoremap <c-k> <c-y>
 
 " When jumping forward and backwards, align with the middle of the screen
 nnoremap <c-f> <c-f>zz
 nnoremap <c-b> <c-b>zz
+" However, in python files jump by function instead
+autocmd Filetype python nmap <c-b> [pfzt
+autocmd Filetype python nmap <c-f> ]pfzt
 
-" Edit and source vimrc
+"" Show syntax errors locations window
+nnoremap <c-e> :lopen<CR>
+
+" Quickly edit and source vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 
-" Turn on spelling for gitcommit messages, markdown and rst
-autocmd FileType gitcommit setlocal spell nonumber norelativenumber
-autocmd FileType markdown setlocal spell nonumber norelativenumber
-autocmd FileType mkd setlocal spell nonumber norelativenumber
-autocmd FileType rst setlocal spell nonumber norelativenumber
-autocmd FileType vim setlocal shiftwidth=4
+" Quickly edit bash config
+nnoremap <leader>eb :vsplit ~/.bash_profile<cr>
 
-" Jump to definition
-nnoremap <c-g> <c-]>
+" Install plugins
+nnoremap <leader>pi :PlugInstall<cr>
 
-" Dark color scheme
-set background=dark
+"" Show syntax errors locations window
+nnoremap <c-e> :lopen<CR>
 
-colorscheme dunk
+" show which syntactic group the object under the cursor belongs to
+nnoremap <leader>wit :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+                         \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+                         \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
-" Show the line that the cursor is on
-set cursorline
+ " Split the window in various directions with shift key combos
+ nnoremap <leader>kk :split<CR>
+ nnoremap <leader>jj :below split<CR>
+ nnoremap <leader>hh :vsplit<CR>
+ nnoremap <leader>ll :rightbelow vsplit<CR>
 
-" Colour of the line that the cursor is on
-hi CursorLine guibg=#303030
 
-set wildchar=<Tab> wildmenu wildmode=full wildcharm=<c-z>
+" Make paste work on OSX
+if &term =~ "xterm.*"
+    let &t_ti = &t_ti . "\e[?2004h"
+    let &t_te = "\e[?2004l" . &t_te
+    function! XTermPasteBegin(ret)
+        set pastetoggle=<Esc>[201~
+        set paste
+        return a:ret
+    endfunction
+    map <expr> <Esc>[200~ XTermPasteBegin("i")
+    imap <expr> <Esc>[200~ XTermPasteBegin("")
+    vmap <expr> <Esc>[200~ XTermPasteBegin("c")
+    cmap <Esc>[200~ <nop>
+    cmap <Esc>[201~ <nop>
+end
 
-" Ignore these files when completing
-set wildignore+=*.pyc
+
+autocmd FileType gitcommit,markdown,mkd,rst setlocal spell nonumber norelativenumber
+" autocmd FileType vim setlocal shiftwidth=4
 
 " Show a colored column for python files, to help conforming to PEP8
 autocmd Filetype python set colorcolumn=120
@@ -142,208 +87,51 @@ autocmd Filetype python highlight ColorColumn ctermbg=5
 " with relative number (https://github.com/vim/vim/issues/282)
 autocmd Filetype ruby set norelativenumber
 
+" Clean up the map space
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
 
-"" For syntastic so that the error list is always populated (might cause
-"" conflicts)
-let g:syntastic_always_populate_loc_list = 1
-"" Show syntax errors locations window
-nnoremap <c-e> :lopen<CR>
+call plug#begin('~/.vim/plugged')
+    """""""" General
+    Plug 'tpope/vim-dispatch'
+    Plug 'vim-airline/vim-airline'
+    source ~/.vim/bufexplorer.vim
+    source ~/.vim/nerdtree.vim
+    source ~/.vim/fzf.vim
 
-" show which syntactic group the thing under the cursor belongs to - useful
-" for creating syntax files, but not in general use
- map <leader>wit :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-                         \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-                         \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+    """""""" Code
+    Plug 'gorkunov/smartpairs.vim'
+    Plug 'majutsushi/tagbar'
+    Plug 'tpope/vim-commentary'
+    " source ~/.vim/syntastic.vim
+    Plug 'w0rp/ale'
+    Plug 'ervandew/supertab'
+    source ~/.vim/ack.vim
+    source ~/.vim/autoformat.vim
+    source ~/.vim/jedi.vim
 
-"" Use ag with ack.vim
-if executable('ag')
-  "let g:ackprg = 'ag --vimgrep'
-  let g:ackprg = 'ag --nogroup --nocolor --column'
-endif
+    """""""" Python
+    Plug 'kana/vim-textobj-user'
+    Plug 'bps/vim-textobj-python'
+    " Plug 'nvie/vim-flake8'
+    Plug 'fisadev/vim-isort'
 
-" autocmd InsertEnter * :setlocal nohlsearch
-" autocmd InsertLeave * :setlocal hlsearch
+    """""""" Git
+    Plug 'airblade/vim-gitgutter'
+    source ~/.vim/fugitive.vim
+    Plug 'tpope/vim-rhubarb'
 
+    """""""" Docker
+    Plug 'ekalinin/Dockerfile.vim'
 
-augroup colors
-    autocmd!
-    " Make diffs look like they do in the terminal with my git config
-    autocmd ColorScheme * hi diffAdded guifg=#72B836
-    autocmd ColorScheme * hi diffRemoved guifg=#AA4627
+    """""""" Markdown
+    Plug 'plasticboy/vim-markdown'
 
-    autocmd ColorScheme * hi DiffAdd guifg=#72B836 guibg=#1A1A1A
-    autocmd ColorScheme * hi DiffDelete guifg=#AA4627 guibg=#1A1A1A
-    " Make searches show up in yellow for better visibility
-    autocmd ColorScheme * hi Search guibg=Yellow
-augroup END
+    """""""" Future plugins to explore / get working
+    " Plug 'honza/vim-snippets'
+    " Plug 'Shougo/neocomplete.vim'
+    " Plug 'alfredodeza/pytest.vim'
+    " Plug 'terryma/vim-expand-region'
+call plug#end()
 
-nnoremap <space>gd :Gdiff<CR>
-nnoremap <space>gb :Gblame<CR>
-nnoremap <space>gs :Gstatus<CR>
-
-nnoremap <c-d> :NERDTree<CR>
-nnoremap <c-s> :BufExplorerHorizontalSplit<CR>
-
-let g:bufExplorerSplitBelow=1
-let g:bufExplorerSplitHorzSize=10
-let g:bufExplorerSplitOutPathName=0
-let g:bufExplorerShowRelativePath=1
-let g:bufExplorerDefaultHelp=0
-let g:bufExplorerDisableDefaultKeyMapping=1
-
-" Make backspace work outside of the current insert mode addition
-set backspace=indent,eol,start
-
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_warning_symbol = "½"
-let g:syntastic_error_symbol = "✗"
-let g:syntastic_style_warning_symbol = "S½"
-let g:syntastic_style_error_symbol = "S✗"
-
-nnoremap <leader>st :SyntasticToggleMode<cr>
-
-" Show file outline
-nnoremap <c-c> :TagbarToggle<CR>
-
-" let g:syntastic_python_checkers=["python", "flake8"]
-let g:syntastic_python_checkers=["pylint"]
-" let g:syntastic_python_checkers=["flake8"]
-" let g:syntastic_python_checkers=["python"]
-" let g:syntastic_python_checkers=["python", "flake8", "pylint"]
-
-" FZF and tags
-let g:fzf_tags_command = 'ctags -R --python-kinds=-i'
-nnoremap <leader>t :Tags<CR>
-nnoremap <leader>f :GFiles<CR>
-" imap <c-x><c-o> <plug>(fzf-complete-line)
-
-" nnoremap <c-t> :OpenPytestError<CR>
-
-" " Split the window in various directions with shift key combos
-" nnoremap <S-k> :split above<CR>
-" nnoremap <S-j> :split below<CR>
-" nnoremap <S-l> :vsplit left<CR>
-" nnoremap <S-h> :vsplit right<CR>
-
-" Mirror the jump-to-tag forwards keystroke with the other square bracket
-" nnoremap <c-[> <c-t>
-
-
-" TODO: Why is this overriding the enter key on its own?
-" This really does not seem to work...
-" nnoremap <c-m> :res +1<CR>
-" nnoremap <c-n> :res -1<CR>
-
-
-" function GdiffInTab()
-"     tabedit %
-"     Gdiff
-" endfunction
-" command GdiffInTab tabedit %|Gdiff 
-" nnoremap -- :tabedit %<CR>:Gdiff<CR>
-"
-
-function! TabDiffGStatus()
-    if has('multi_byte_encoding')
-        let colon = '\%(:\|\%uff1a\)'
-    else
-        let colon = ':'
-    endif
-    let filename = matchstr(matchstr(getline(line('.')),'^#\t\zs.\{-\}\ze\%( ([^()[:digit:]]\+)\)\=$'), colon.' *\zs.*')
-    tabedit %
-    execute ':Gedit ' . filename
-    Gvdiff
-endfunction
-command! TabDiffGStatus call TabDiffGStatus()
-autocmd FileType gitcommit nnoremap <buffer> dt :TabDiffGStatus<CR>
-
-nnoremap <leader>tc :tabclose<CR>
-" cmap gs GStatus
-
-nnoremap <silent><Leader>tst <Esc>:Pytest project<CR>
-nnoremap <silent><Leader>tt <Esc>:Pytest project verbose<CR>
-nnoremap <silent><Leader>nn <Esc>:Pytest next<CR>
-nnoremap <silent><Leader>pp <Esc>:Pytest previous<CR>
-
-function! s:PytestSyntax() abort
-	let b:current_syntax = 'pytest'                                                                                                         
-	syn match PytestPlatform              '\v^(platform(.*))'
-	syn match PytestTitleDecoration       "\v\={2,}"
-	syn match PytestTitle                 "\v\s+(test session starts)\s+"
-	syn match PytestCollecting            "\v(collecting\s+(.*))"
-	syn match PytestPythonFile            "\v((.*.py\s+))"
-	syn match PytestFooterFail            "\v\s+((.*)(failed|error) in(.*))\s+"
-	syn match PytestFooter                "\v\s+((.*)passed in(.*))\s+"
-	syn match PytestFailures              "\v\s+(FAILURES|ERRORS)\s+"
-	syn match PytestErrors                "\v^E\s+(.*)"
-	syn match PytestDelimiter             "\v_{3,}"
-	syn match PytestFailedTest            "\v_{3,}\s+(.*)\s+_{3,}"
-
-	hi def link PytestPythonFile          String
-	hi def link PytestPlatform            String
-	hi def link PytestCollecting          String
-	hi def link PytestTitleDecoration     Comment
-	hi def link PytestTitle               String
-	hi def link PytestFooterFail          String
-	hi def link PytestFooter              String
-	hi def link PytestFailures            Number
-	hi def link PytestErrors              Number
-	hi def link PytestDelimiter           Comment
-	hi def link PytestFailedTest          Comment
-endfunction
-
-
-function! ChompedSystem( ... )
-    return substitute(call('system', a:000), '\n\+$', '', '')
-endfunction
-
-function! OpenPytestError()
-
-    " botright new PytestRun
-    " Go to, or open a new, PytestRun window and buffer
-    let winnr = bufwinnr('PytestRun')
-    silent! execute  winnr < 0 ? 'botright new ' . 'PytestRun' : winnr . 'wincmd w'
-
-    " Make this buffer ephemeral
-    setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number filetype=pytest
-
-    " Run pytest; the output will go into the buffer. Resize to fit.
-    silent! execute 'silent %!'. "py.test -x -q"
-    silent! execute 'resize ' . line('$')
-
-    " Apply syntax highlighting to the buffer
-    call s:PytestSyntax()
-
-    " Switch to the other pane
-    execute 'wincmd p'
-
-    " Run pytest again (TODO: just run it once), output a json report, parse
-    " it with some python to extraxt the file and line
-    let command_output = ChompedSystem("py.test -x -q --json=/tmp/report.json 2>&1 >/dev/null; cat /tmp/report.json | jq -c -M '.' | python -c \"import json; import sys; input = json.loads(sys.stdin.read()); failed_tests = [test for test in input['report']['tests'] if test['outcome'] == 'failed']; print failed_tests[0]['call']['longrepr'].splitlines()[-1].split(' ')[0][0:-1] if failed_tests else 'pass:0';\"")
-
-    " Get the filename and line number, open the file, jump to the line
-    echom command_output
-    let parts = split(command_output, ":")
-    let [filename, line_number] = parts
-
-    if filename != "pass"
-        silent! execute 'edit' filename
-        execute line_number
-        " Recenter on the line
-        execute 'normal! zz'
-    endif
-
-endfunction
-command! OpenPytestError call OpenPytestError()
-" nnoremap <c-t> :OpenPytestError<CR>
-
-let g:vim_markdown_folding_disabled = 1
+" source ~/.vim/dunkpytest.vim
