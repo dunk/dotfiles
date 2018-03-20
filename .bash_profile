@@ -279,3 +279,10 @@ function find_by_extension {
   find . -name "*.${1}"
 }
 alias fe='find_by_extension'
+
+export FZF_ROOT_PATH=/usr/local/opt/fzf
+if [ -f $FZF_ROOT_PATH ]; then
+    export PATH="$PATH:${FZF_ROOT_PATH}/bin"
+    [[ $- == *i* ]] && source "${FZF_ROOT_PATH}/shell/completion.bash" 2> /dev/null
+    source "${FZF_ROOT_PATH}/shell/key-bindings.bash"
+fi
