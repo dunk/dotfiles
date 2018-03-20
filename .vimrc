@@ -52,12 +52,14 @@ nnoremap <leader>wit :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name")
                          \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
                          \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
- " Split the window in various directions with shift key combos
- nnoremap <leader>kk :split<CR>
- nnoremap <leader>jj :below split<CR>
- nnoremap <leader>hh :vsplit<CR>
- nnoremap <leader>ll :rightbelow vsplit<CR>
+" Split the window in various directions with shift key combos
+nnoremap <leader>kk :split<CR>
+nnoremap <leader>jj :below split<CR>
+nnoremap <leader>hh :vsplit<CR>
+nnoremap <leader>ll :rightbelow vsplit<CR>
 
+" Fix that typo that I do all the time
+cmap W w
 
 " Make paste work on OSX
 if &term =~ "xterm.*"
@@ -87,10 +89,6 @@ autocmd Filetype python highlight ColorColumn ctermbg=5
 " with relative number (https://github.com/vim/vim/issues/282)
 autocmd Filetype ruby set norelativenumber
 
-" Clean up the map space
-let g:loaded_netrw       = 1
-let g:loaded_netrwPlugin = 1
-
 call plug#begin('~/.vim/plugged')
     """""""" General
     Plug 'tpope/vim-dispatch'
@@ -98,12 +96,13 @@ call plug#begin('~/.vim/plugged')
     source ~/.vim/bufexplorer.vim
     source ~/.vim/nerdtree.vim
     source ~/.vim/fzf.vim
+    Plug 'terryma/vim-expand-region'
+    Plug 'rhysd/clever-f.vim'
 
     """""""" Code
     Plug 'gorkunov/smartpairs.vim'
     Plug 'majutsushi/tagbar'
     Plug 'tpope/vim-commentary'
-    " source ~/.vim/syntastic.vim
     Plug 'w0rp/ale'
     Plug 'ervandew/supertab'
     source ~/.vim/ack.vim
@@ -113,7 +112,6 @@ call plug#begin('~/.vim/plugged')
     """""""" Python
     Plug 'kana/vim-textobj-user'
     Plug 'bps/vim-textobj-python'
-    " Plug 'nvie/vim-flake8'
     Plug 'fisadev/vim-isort'
 
     """""""" Git
@@ -127,11 +125,15 @@ call plug#begin('~/.vim/plugged')
     """""""" Markdown
     Plug 'plasticboy/vim-markdown'
 
+    """""""" Database
+    Plug 'tpope/vim-dotenv'
+    source ~/.vim/dadbod.vim
+
     """""""" Future plugins to explore / get working
+    " Plug 'junegunn/gv.vim'
     " Plug 'honza/vim-snippets'
     " Plug 'Shougo/neocomplete.vim'
     " Plug 'alfredodeza/pytest.vim'
-    " Plug 'terryma/vim-expand-region'
 call plug#end()
 
 " source ~/.vim/dunkpytest.vim
