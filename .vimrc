@@ -28,8 +28,8 @@ nnoremap <c-k> <c-y>
 nnoremap <c-f> <c-f>zz
 nnoremap <c-b> <c-b>zz
 " However, in python files jump by function instead
-autocmd Filetype python nmap <c-b> [pfzt
-autocmd Filetype python nmap <c-f> ]pfzt
+" autocmd Filetype python nmap <c-b> [pfzt
+" autocmd Filetype python nmap <c-f> ]pfzt
 
 "" Show syntax errors locations window
 nnoremap <c-e> :lopen<CR>
@@ -42,7 +42,8 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>eb :vsplit ~/.bash_profile<cr>
 
 " Install plugins
-nnoremap <leader>pi :PlugInstall<cr>
+" Disabled in favour of 'paste inside' shortcut
+" nnoremap <leader>pi :PlugInstall<cr>
 
 "" Show syntax errors locations window
 nnoremap <c-e> :lopen<CR>
@@ -89,6 +90,22 @@ autocmd Filetype python highlight ColorColumn ctermbg=5
 " with relative number (https://github.com/vim/vim/issues/282)
 autocmd Filetype ruby set norelativenumber
 
+" Nuke numbers (for better copy-paste)
+" TODO: also turn off git markers
+nnoremap <leader>nn :set number! relativenumber!<CR>
+
+" Duplicate and preserve original line
+nmap <leader>dd yypkgccj
+
+" Paste n-1, taking a text object
+nnoremap <leader>p :set opfunc=TastyPasty<cr>g@
+
+" vnoremap <silent> s :<c-u>call TastyPasty(visualmode(), 1)<cr>
+function! TastyPasty(vt)
+    execute "normal! `[v`]d\"0P"
+endfunction
+
+
 call plug#begin('~/.vim/plugged')
     """""""" General
     Plug 'tpope/vim-dispatch'
@@ -108,11 +125,17 @@ call plug#begin('~/.vim/plugged')
     source ~/.vim/ack.vim
     source ~/.vim/autoformat.vim
     source ~/.vim/jedi.vim
+    Plug 'triglav/vim-visual-increment'
+    Plug 'tpope/vim-surround'
 
     """""""" Python
     Plug 'kana/vim-textobj-user'
     Plug 'bps/vim-textobj-python'
     Plug 'fisadev/vim-isort'
+
+    """""""" JS
+    Plug 'pangloss/vim-javascript'
+    Plug 'mxw/vim-jsx'
 
     """""""" Git
     Plug 'airblade/vim-gitgutter'
