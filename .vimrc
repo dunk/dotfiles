@@ -68,7 +68,7 @@ nnoremap <Tab> <C-w>w
 nnoremap <S-Tab> <C-w>W
 
 " Fix that typo that I do all the time
-cmap W w
+" cmap W w
 
 " Make paste work on OSX
 if &term =~ "xterm.*"
