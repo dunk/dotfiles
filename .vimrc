@@ -140,6 +140,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'kana/vim-textobj-user'
     Plug 'bps/vim-textobj-python'
     Plug 'fisadev/vim-isort'
+    " Plug 'stsewd/isort.nvim', { 'do': ':UpdateRemotePlugins' }
 
     """""""" JS
     Plug 'pangloss/vim-javascript'
@@ -161,6 +162,7 @@ call plug#begin('~/.vim/plugged')
     source ~/.vim/dadbod.vim
 
     """""""" Future plugins to explore / get working
+    Plug 'mbbill/undotree'
     " Plug 'junegunn/gv.vim'
     " Plug 'honza/vim-snippets'
     " Plug 'Shougo/neocomplete.vim'
