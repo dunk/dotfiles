@@ -120,6 +120,7 @@ call plug#begin('~/.vim/plugged')
     source ~/.vim/fzf.vim
     Plug 'terryma/vim-expand-region'
     Plug 'rhysd/clever-f.vim'
+    Plug 'martinda/Jenkinsfile-vim-syntax'
 
     """""""" Code
     Plug 'gorkunov/smartpairs.vim'
