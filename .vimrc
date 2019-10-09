@@ -63,6 +63,10 @@ nnoremap <leader>jj :below split<CR>
 nnoremap <leader>hh :vsplit<CR>
 nnoremap <leader>ll :rightbelow vsplit<CR>
 
+" Tab to cycle through windows
+nnoremap <Tab> <C-w>w
+nnoremap <S-Tab> <C-w>W
+
 " Fix that typo that I do all the time
 cmap W w
 
