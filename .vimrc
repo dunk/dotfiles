@@ -5,7 +5,11 @@ colorscheme dunk
 hi CursorLine guibg=#303030
 
 let mapleader=" "
-let maplocalleader=","
+" let maplocalleader=","
+
+" We don't use the maplocalleader binding above much, and "," is a very useful
+" key, so instead map it to repeat-macro
+:map , @@
 
 " Use jk instead of esc to return to normal mode
 inoremap jk <esc>
