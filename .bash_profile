@@ -130,6 +130,8 @@ alias opc='ssh -p 2222 localhost'
 alias fg-='fg -'
 
 alias cdd='cd ~/Downloads'
+alias cdp='cd ~/Projects'
+alias cdr='cd ~/Reference'
 
 #grep for a string in the source files, then for all files which match grep for a second string within them
 function ggrep() {
