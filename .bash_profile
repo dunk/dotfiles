@@ -29,7 +29,7 @@ stty -ixon
 export EDITOR="vim"
 
 export HISTCONTROL=ignoreboth
-export HISTIGNORE="bg*:fg*:j:l:ll:ls:ls -hal:h:ht:history:gh*:du*:tree:vim:python:cd ..:cd:cd -:ps aux:+:-"
+export HISTIGNORE="bg*:fg*:j:l:ll:ls:ls -hal:h:ht:history:gh*:du:tree:vim:python:cd ..:cd:cd -:ps aux:+:-"
 export HISTFILESIZE=100000000000
 export HISTSIZE=1000000
 
