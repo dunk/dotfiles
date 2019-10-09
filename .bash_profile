@@ -105,8 +105,8 @@ alias ip='dig +short myip.opendns.com @resolver1.opendns.com'
 # find . -name .gitattributes | map dirname
 alias map='xargs -n1'
 
-alias gd='git diff'
-alias gds='git diff --staged'
+alias gd='git --no-pager diff'
+alias gds='git --no-pager diff --staged'
 alias gs='git status -s'
 alias gss='git status -s'
 
@@ -116,8 +116,12 @@ alias gbaa='git branch --all -vv'
 
 alias gc='git checkout'
 alias gsl='git stash list'
-alias gl='git log --reverse'
-alias gls='git log --oneline --reverse -10'
+function gl() {
+    git log --reverse -20 --pretty="format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset) %s"
+}
+alias gls='gl'
+# alias gls='git log --oneline --reverse -10'
+alias glb='git log --oneline --reverse master..'
 alias gg='git log --graph --oneline --all'
 alias co='git checkout'
 
