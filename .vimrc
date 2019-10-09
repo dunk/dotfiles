@@ -21,9 +21,6 @@ nnoremap <c-l> :let @/ = ""<CR>
 " Flashback last buffer
 nnoremap <c-h> :e#<CR>
 
-" Discard other windows
-nnoremap <c-o> :only<CR>
-
 " Scroll the viewport
 nnoremap <c-j> <c-e>
 nnoremap <c-k> <c-y>
