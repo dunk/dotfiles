@@ -39,6 +39,7 @@
     staash = stash --include-untracked
     cane = commit --amend --no-edit
     files = show --pretty="" --name-only
+    stats = shortlog -s -n
 
     lg = !"git lg1"
     lg1 = !"git lg1-specific --all"

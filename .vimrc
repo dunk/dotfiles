@@ -88,7 +88,8 @@ autocmd FileType gitcommit,markdown,mkd,rst setlocal spell nonumber norelativenu
 " autocmd FileType vim setlocal shiftwidth=4
 
 " Show a colored column for python files, to help conforming to PEP8
-autocmd Filetype python set colorcolumn=120
+" autocmd Filetype python set colorcolumn=120
+autocmd Filetype python set colorcolumn=79
 autocmd Filetype python highlight ColorColumn ctermbg=5
 
 " Trying to make Ruby files not choke because syntax highlighting interfeares
@@ -139,6 +140,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'bps/vim-textobj-python'
     Plug 'fisadev/vim-isort'
     " Plug 'stsewd/isort.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'psf/black'
 
     """""""" JS
     Plug 'pangloss/vim-javascript'
