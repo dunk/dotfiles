@@ -115,13 +115,25 @@ alias gba='git branch -vv'
 alias gbaa='git branch --all -vv'
 
 alias gc='git checkout'
+
 alias gsl='git stash list'
-function gl() {
-    git log --reverse -20 --pretty="format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset) %s"
+alias gsp='git stash pop'
+
+function gls() {
+    local GIT_OUTPUT_FORMAT='format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset) %s'
+    local CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$CURRENT_BRANCH" == "master" ]; then
+        git log --reverse -20 --pretty="$GIT_OUTPUT_FORMAT"
+    else
+        git log --reverse --pretty="$GIT_OUTPUT_FORMAT" master..
+    fi
 }
-alias gls='gl'
-# alias gls='git log --oneline --reverse -10'
-alias glb='git log --oneline --reverse master..'
+alias gl='gls'
+
+function grb() {
+    git rebase -i HEAD~$(($(gls | wc -l | tr -d "[:space:]")+1))
+}
+
 alias gg='git log --graph --oneline --all'
 alias co='git checkout'
 
