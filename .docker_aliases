@@ -15,6 +15,7 @@ drma      remove all containers
 de        drop into a shell on a container
 dv        list all volumes
 dvrm      remove a volume
+dvrma     remove ALL volumes
 drun      run an ephemeral ubuntu container
 dfailed   examine a failed container
 dwn       watch not running containers
@@ -46,8 +47,16 @@ alias dhst='docker history'
 alias dv='docker volume ls'
 alias dvrm='docker volume rm'
 
+function dvrma() {
+    docker volume ls -q | xargs docker volume rm
+}
+
 function dp() {
     docker ps --format "$DOCKER_PSFORMAT" "$@"
+}
+
+function dp1() {
+    docker ps --format "{{.Names}}" | xargs
 }
 
 function dpa() {

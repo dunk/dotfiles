@@ -21,6 +21,9 @@ nnoremap <c-l> :let @/ = ""<CR>
 " Flashback last buffer
 nnoremap <c-h> :e#<CR>
 
+" Make window fullscreen
+nnoremap <c-o> :only<CR>
+
 " Scroll the viewport
 nnoremap <c-j> <c-e>
 nnoremap <c-k> <c-y>
@@ -32,7 +35,10 @@ nnoremap <c-b> <c-b>zz
 " autocmd Filetype python nmap <c-b> [pfzt
 " autocmd Filetype python nmap <c-f> ]pfzt
 
-"" Show syntax errors locations window
+" Quickly jump back to last edited location
+nnoremap <BS> `.
+
+" Show syntax errors locations window
 nnoremap <c-e> :lopen<CR>
 
 " Quickly edit and source vimrc
@@ -47,7 +53,7 @@ nnoremap <leader>eb :vsplit ~/.bash_profile<cr>
 " nnoremap <leader>pi :PlugInstall<cr>
 
 "" Show syntax errors locations window
-nnoremap <c-e> :lopen<CR>
+" nnoremap <c-e> :lopen<CR>
 
 " show which syntactic group the object under the cursor belongs to
 nnoremap <leader>wit :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
@@ -63,6 +69,10 @@ nnoremap <leader>ll :rightbelow vsplit<CR>
 " Tab to cycle through windows
 nnoremap <Tab> <C-w>w
 nnoremap <S-Tab> <C-w>W
+
+" " Tab to cycle through windows
+" nnoremap <Tab> [pf
+" nnoremap <S-Tab> ]pf
 
 " Fix that typo that I do all the time
 " cmap W w
@@ -89,8 +99,8 @@ autocmd FileType gitcommit,markdown,mkd,rst setlocal spell nonumber norelativenu
 
 " Show a colored column for python files, to help conforming to PEP8
 " autocmd Filetype python set colorcolumn=120
-autocmd Filetype python set colorcolumn=79
-autocmd Filetype python highlight ColorColumn ctermbg=5
+" autocmd Filetype python set colorcolumn=88
+" autocmd Filetype python highlight ColorColumn ctermbg=5
 
 " Trying to make Ruby files not choke because syntax highlighting interfeares
 " with relative number (https://github.com/vim/vim/issues/282)
@@ -111,17 +121,20 @@ function! TastyPasty(vt)
     execute "normal! `[v`]d\"0P"
 endfunction
 
+" Close a buffer without messing with the windows.
+nnoremap <silent> <leader>q :bp\|bd #<CR>
 
 call plug#begin('~/.vim/plugged')
     """""""" General
     Plug 'tpope/vim-dispatch'
-    Plug 'vim-airline/vim-airline'
+    source ~/.vim/airline.vim
     source ~/.vim/bufexplorer.vim
     source ~/.vim/nerdtree.vim
     source ~/.vim/fzf.vim
     Plug 'terryma/vim-expand-region'
     Plug 'rhysd/clever-f.vim'
-    Plug 'martinda/Jenkinsfile-vim-syntax'
+    Plug 'tpope/vim-repeat'
+    source ~/.vim/togglelist.vim
 
     """""""" Code
     Plug 'gorkunov/smartpairs.vim'
@@ -130,10 +143,11 @@ call plug#begin('~/.vim/plugged')
     Plug 'w0rp/ale'
     Plug 'ervandew/supertab'
     source ~/.vim/ack.vim
-    source ~/.vim/autoformat.vim
+    " source ~/.vim/autoformat.vim
     source ~/.vim/jedi.vim
     Plug 'triglav/vim-visual-increment'
     Plug 'tpope/vim-surround'
+    Plug 'kburdett/vim-nuuid'
 
     """""""" Python
     Plug 'kana/vim-textobj-user'
@@ -147,7 +161,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'mxw/vim-jsx'
 
     """""""" Git
-    Plug 'airblade/vim-gitgutter'
+    source ~/.vim/gitgutter.vim
     source ~/.vim/fugitive.vim
     Plug 'tpope/vim-rhubarb'
 
@@ -156,6 +170,9 @@ call plug#begin('~/.vim/plugged')
 
     """""""" Markdown
     Plug 'plasticboy/vim-markdown'
+
+    """""""" Jenkins
+    Plug 'martinda/Jenkinsfile-vim-syntax'
 
     """""""" Database
     Plug 'tpope/vim-dotenv'

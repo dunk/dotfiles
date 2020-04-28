@@ -40,7 +40,7 @@ function get_prompt() {
     local HIST="$(bracketed $(coloured YELLOW '\!'))"
     local TIME="$(bracketed $(coloured YELLOW '\t'))"
     local DURATION="$(bracketed $(coloured YELLOW '${timer_show}s'))"
-    local GIT="$(coloured BLUE '$(__git_ps1)')"
+    local GIT="$(coloured PURPLE '$(__git_ps1)')"
     export PS1="${USER}${AT}${HOST}  ${DIR} ${JOBS} ${HIST} ${TIME} ${DURATION} ${GIT}\n\$ "
 }
 

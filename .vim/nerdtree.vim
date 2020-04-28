@@ -2,9 +2,12 @@ Plug 'scrooloose/nerdtree'
 
 " Exit if the only window left is NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 " let NERDTreeIgnore=['\.pyc$', '.DS_Store']
+let NERDTreeIgnore=['__pycache__']
 let g:NERDTreeRespectWildIgnore=1
 let g:NERDTreeShowHidden=1
+let g:NERDTreeShowBookmarks=1
 
 let NERDTreeMapOpenSplit='ss'
 let NERDTreeMapPreviewSplit='S'
@@ -23,5 +26,5 @@ function! NERDTreeToggleInCurDir()
 endfunction
 
 " nnoremap <leader>d :NERDTreeToggle<CR>
-nnoremap <leader>d :call NERDTreeToggleInCurDir()<CR>
+nnoremap <leader>do :call NERDTreeToggleInCurDir()<CR>
 " nmap <silent> <C-i> :call NERDTreeToggleInCurDir()<cr>

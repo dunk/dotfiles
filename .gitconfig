@@ -2,7 +2,8 @@
      ; helper = osxkeychain
 [core]
     ; pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
-    excludesfile = /Users/dunk/.gitignore_global
+	excludesfile = /Users/dgordon/.gitignore_global
+	pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
     ui = auto
 [color "diff"]
@@ -11,11 +12,11 @@
     old = red bold
     new = green bold
 [difftool "sourcetree"]
-    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-    path = 
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
-    cmd = /opt/homebrew-cask/Caskroom/sourcetree/2.2.4/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-    trustExitCode = true
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 [pull]
     rebase = true
 [merge]
@@ -27,6 +28,8 @@
     cb = checkout -b
     st = status --short
     sh = show
+    cp = cherry-pick
+    pu = !git push -u origin $(git symbolic-ref --short HEAD)
     graph = log --graph --all --decorate --stat --date=iso
     b = branch --all -vv
     sl = stash list
@@ -40,6 +43,11 @@
     cane = commit --amend --no-edit
     files = show --pretty="" --name-only
     stats = shortlog -s -n
+    fixup = commit --amend --no-edit
+    undohard = reset --hard HEAD~1
+    shoe = show
+
+    mylog= log --no-merges --pretty="format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset)%n%s%n%n%b%n"
 
     lg = !"git lg1"
     lg1 = !"git lg1-specific --all"
@@ -55,3 +63,13 @@
     clean = git-lfs clean %f
     smudge = git-lfs smudge %f
     required = true
+[user]
+	name = Duncan Gordon
+	email = dgordon@liquidnet.com
+; [diff]
+    ; tool = meld
+; [difftool]
+    ; prompt = false
+; [difftool "meld"]
+  ; trustExitCode = true
+  ; cmd = open -W -a Meld --args \"$LOCAL\" \"$REMOTE\"

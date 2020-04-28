@@ -6,9 +6,12 @@ shopt -s histappend
 shopt -s nocaseglob
 
 [ -f /etc/bash_completion ] && source /etc/bash_completion
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
-[ -f ~/.bash_local ] && source ~/.bash_local
+[ -f /usr/local/etc/bash_completion.d ] && . /usr/local/etc/bash_completion
 source ~/.bash_prompt
+
+source /usr/local/etc/bash_completion.d/git-prompt.sh
+source /usr/local/etc/bash_completion.d/git-completion.bash
+source /usr/local/etc/bash_completion.d/brew
 
 for f in ~/.bash_complete/*; do source $f; done
 
@@ -74,6 +77,8 @@ alias -- -='cd -'
 
 alias g='git'
 alias v='vim'
+alias vom='vim'
+alias vin='vim'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
@@ -105,8 +110,8 @@ alias ip='dig +short myip.opendns.com @resolver1.opendns.com'
 # find . -name .gitattributes | map dirname
 alias map='xargs -n1'
 
-alias gd='git --no-pager diff'
-alias gds='git --no-pager diff --staged'
+alias gd='git diff --no-prefix'
+alias gds='gd --staged'
 alias gs='git status -s'
 alias gss='git status -s'
 
@@ -115,9 +120,18 @@ alias gba='git branch -vv'
 alias gbaa='git branch --all -vv'
 
 alias gc='git checkout'
+alias gcm='git checkout master'
 
 alias gsl='git stash list'
 alias gsp='git stash pop'
+
+function gca() {
+    git commit --amend --no-edit
+}
+
+function gmb() {
+    git branch -m "${1}"
+}
 
 function gls() {
     local GIT_OUTPUT_FORMAT='format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset) %s'
@@ -236,9 +250,10 @@ function gbra() {
 
 # git delete branch
 function gdel() {
-    git checkout master
-    git push origin --delete $1
-    git branch -D $1
+    # git checkout master
+    # This should have been done by the merge
+    # git push origin --delete $1
+    git branch -d $1
 }
 
 # git quick push
@@ -302,3 +317,48 @@ if [ -d $FZF_ROOT_PATH ]; then
     [[ $- == *i* ]] && source "${FZF_ROOT_PATH}/shell/completion.bash" 2> /dev/null
     source "${FZF_ROOT_PATH}/shell/key-bindings.bash"
 fi
+
+function pushit() {
+    local source_branch user_id title
+
+    source_branch="$(git symbolic-ref --short HEAD)"
+
+    if [ -z "$source_branch" ]; then
+        echo "Couldn't determine source branch"
+        return
+    fi
+
+    if [ "$1" == "marco" ]; then
+        user_id=47
+    elif [ "$1" == "neil" ]; then
+        user_id=33
+    elif [ "$1" == "dunk" ]; then
+        user_id=45
+    elif [ "$1" == "cody" ]; then
+        user_id=50
+    elif [ "$1" == "lukasz" ]; then
+        user_id=48
+    elif [ "$1" == "vikas" ]; then
+        user_id=42
+    fi
+
+    if [ -z "$user_id" ]; then
+        echo "Unrecognised user"
+        return
+    fi
+
+    title=$(git log -1 --pretty=%s)
+
+    if [ -z "$title" ]; then
+        echo "You must provide a title for the merge"
+        return
+    fi
+
+    # echo $source_branch $user_id $title
+
+    git push -u origin "$source_branch"
+
+    /Users/dgordon/bin/gitlab/venv/bin/python -c "import gitlab; gitlab.Gitlab.from_config('researchexchange').projects.get(54).mergerequests.create({'source_branch': '$source_branch', 'target_branch': 'master', 'title': '$title', 'assignee_id': $user_id})"
+}
+
+[ -f ~/.bash_local ] && source ~/.bash_local
