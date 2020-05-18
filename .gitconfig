@@ -2,7 +2,7 @@
      ; helper = osxkeychain
 [core]
     ; pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
-	excludesfile = /Users/dgordon/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
     ui = auto
