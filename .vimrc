@@ -137,6 +137,11 @@ endfunction
 " Close a buffer without messing with the windows.
 nnoremap <silent> <leader>q :bp\|bd #<CR>
 
+" augroup fmt
+"   autocmd!
+"   autocmd BufWritePre *.sql undojoin | Neoformat
+" augroup END
+
 call plug#begin('~/.vim/plugged')
     """""""" General
     Plug 'tpope/vim-dispatch'
@@ -161,6 +166,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'triglav/vim-visual-increment'
     Plug 'tpope/vim-surround'
     Plug 'kburdett/vim-nuuid'
+    Plug 'sbdchd/neoformat'
 
     """""""" Python
     Plug 'kana/vim-textobj-user'
