@@ -153,6 +153,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'rhysd/clever-f.vim'
     Plug 'tpope/vim-repeat'
     source ~/.vim/togglelist.vim
+    Plug 'christoomey/vim-sort-motion'
 
     """""""" Code
     Plug 'gorkunov/smartpairs.vim'
