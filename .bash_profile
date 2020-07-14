@@ -318,47 +318,84 @@ if [ -d $FZF_ROOT_PATH ]; then
     source "${FZF_ROOT_PATH}/shell/key-bindings.bash"
 fi
 
-function pushit() {
-    local source_branch user_id title
+# function pushit() {
+#     # You can use this function once you have:
+#     # 1) A new branch created
+#     # 2) Your commit on that branch
+#     # NOTE: At the moment this is to support small one-commit branches
+#     local source_branch user_id title
 
-    source_branch="$(git symbolic-ref --short HEAD)"
+#     source_branch="$(git symbolic-ref --short HEAD)"
 
-    if [ -z "$source_branch" ]; then
-        echo "Couldn't determine source branch"
-        return
-    fi
+#     if [ -z "$source_branch" ]; then
+#         echo "Couldn't determine source branch"
+#         return
+#     fi
 
-    if [ "$1" == "marco" ]; then
-        user_id=47
-    elif [ "$1" == "neil" ]; then
-        user_id=33
-    elif [ "$1" == "dunk" ]; then
-        user_id=45
-    elif [ "$1" == "cody" ]; then
-        user_id=50
-    elif [ "$1" == "lukasz" ]; then
-        user_id=48
-    elif [ "$1" == "vikas" ]; then
-        user_id=42
-    fi
+#     if [ "$1" == "marco" ]; then
+#         user_id=47
+#     elif [ "$1" == "neil" ]; then
+#         user_id=33
+#     elif [ "$1" == "dunk" ]; then
+#         user_id=45
+#     elif [ "$1" == "cody" ]; then
+#         user_id=50
+#     elif [ "$1" == "lukasz" ]; then
+#         user_id=48
+#     elif [ "$1" == "vikas" ]; then
+#         user_id=42
+#     elif [ "$1" == "sam" ]; then
+#         user_id=53
+#     elif [ "$1" == "tom" ]; then
+#         user_id=56
+#     fi
 
-    if [ -z "$user_id" ]; then
-        echo "Unrecognised user"
-        return
-    fi
+#     if [ -z "$user_id" ]; then
+#         echo "Unrecognised user"
+#         return
+#     fi
 
-    title=$(git log -1 --pretty=%s)
+#     title=$(git log -1 --pretty=%s)
 
-    if [ -z "$title" ]; then
-        echo "You must provide a title for the merge"
-        return
-    fi
+#     if [ -z "$title" ]; then
+#         echo "You must provide a title for the merge"
+#         return
+#     fi
 
-    # echo $source_branch $user_id $title
+#     # echo $source_branch $user_id $title
 
-    git push -u origin "$source_branch"
+#     git push -u origin "$source_branch"
 
-    /Users/dgordon/bin/gitlab/venv/bin/python -c "import gitlab; gitlab.Gitlab.from_config('researchexchange').projects.get(54).mergerequests.create({'source_branch': '$source_branch', 'target_branch': 'master', 'title': '$title', 'assignee_id': $user_id})"
+#     /Users/dgordon/bin/gitlab/venv/bin/python -c "import gitlab; gitlab.Gitlab.from_config('researchexchange').projects.get(54).mergerequests.create({'source_branch': '$source_branch', 'target_branch': 'master', 'title': '$title', 'assignee_id': $user_id})"
+# }
+
+function send() {
+    # TODO: Have bin created from dotfiles
+    ~/dotfiles/bin/send.sh $@
 }
+
+function master() {
+    set -x
+    # Update master, then update this branch
+    git stash --include-untracked
+    git co master
+    git fp
+    git pull
+    git co -
+    git rebase master
+    git stash pop
+    set +x
+}
+
+function cleanup() {
+    # For some reason order was important with --format, urgh
+    # Therefore might want to use git branch --format="%(refname:short)" --merged, but also this is working already so...
+    git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d
+}
+
+# Bash completion for Makefiles
+complete -W "\`grep -oE '^[a-zA-Z0-9_.-]+:([^=]|$)' ?akefile | sed 's/[^a-zA-Z0-9_.-]*$//'\`" make
+
+alias bp='source ~/.bash_profile'
 
 [ -f ~/.bash_local ] && source ~/.bash_local
