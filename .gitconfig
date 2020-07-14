@@ -4,13 +4,22 @@
     ; pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
 	excludesfile = ~/.gitignore_global
 	pager = diff-so-fancy | less --tabs=4 -RFX
+    ; pager = diff-so-fancy | less --tabs=4 -RFXS --pattern '^(Date|added|deleted|modified): '
+; [pager]
+  ; add      = true
+  ; diff     = true
+  ; difftool = true
+  ; log      = true
+  ; show     = true
 [color]
     ui = auto
 [color "diff"]
-    meta = blue
-    frag = magenta bold
-    old = red bold
-    new = green bold
+	meta = 11
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	commit = yellow bold
+	whitespace = red reverse
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
@@ -46,8 +55,11 @@
     fixup = commit --amend --no-edit
     undohard = reset --hard HEAD~1
     shoe = show
+    pop =  reset HEAD~
+    unstage =  reset
 
     mylog= log --no-merges --pretty="format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset)%n%s%n%n%b%n"
+    mymylog= !"git log --no-merges --author='Duncan Gordon' --pretty='format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset)%n%s%n%n%b%n'"
 
     lg = !"git lg1"
     lg1 = !"git lg1-specific --all"
@@ -73,3 +85,8 @@
 ; [difftool "meld"]
   ; trustExitCode = true
   ; cmd = open -W -a Meld --args \"$LOCAL\" \"$REMOTE\"
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
