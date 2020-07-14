@@ -12,6 +12,7 @@ dpa       list all containers, running or not
 dpn       list all not running containers
 drm       remove a specified container
 drma      remove all containers
+dk        kill a container or set of containers
 de        drop into a shell on a container
 dv        list all volumes
 dvrm      remove a volume
@@ -35,7 +36,8 @@ dtop      show processes across all containers"
 }
 
 
-DOCKER_PSFORMAT='table {{.Names}}\t{{.Image}}\t{{.ID}}\t{{.Status}}\t{{.CreatedAt}}'
+# DOCKER_PSFORMAT='table {{.Names}}\t{{.Image}}\t{{.ID}}\t{{.Status}}\t{{.CreatedAt}}'
+DOCKER_PSFORMAT='table {{.Names}}\t{{.Status}}'
 DOCKER_PSFORMAT_NAMES_ONLY='{{.Names}}'
 
 # A few useful aliases
@@ -65,6 +67,10 @@ function dpa() {
 
 function dpn() {
     dp --filter 'status=exited' "$@"
+}
+
+function dk() {
+    docker kill "$@"
 }
 
 # Remove container, and clean up volumes so that they are not orphaned
