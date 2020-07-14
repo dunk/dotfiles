@@ -45,6 +45,12 @@ nnoremap <c-b> <c-b>zz
 " Quickly jump back to last edited location
 nnoremap <BS> `.
 
+" Easier access to command mode
+nnoremap ; :
+
+" Make Y behave like C and D
+nnoremap Y y$
+
 " Show syntax errors locations window
 nnoremap <c-e> :lopen<CR>
 
