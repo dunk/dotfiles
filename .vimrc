@@ -11,6 +11,13 @@ let mapleader=" "
 " key, so instead map it to repeat-macro
 :map , @@
 
+" Remap capital W, because I typo this **all the time**
+command! W w
+" And the rest
+command! WQ wq
+command! Wq wq
+command! Q q
+
 " Use jk instead of esc to return to normal mode
 inoremap jk <esc>
 inoremap <esc> <nop>
