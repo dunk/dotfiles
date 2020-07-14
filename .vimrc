@@ -206,4 +206,92 @@ call plug#begin('~/.vim/plugged')
     " Plug 'alfredodeza/pytest.vim'
 call plug#end()
 
+" function! s:extract_mark(line)
+"     " Marks show up in the second character from the left, so extract this
+"     return a:line[1]
+" endfunction
+
+" function! s:marks_list()
+"     " Return the uppercase (multi-file) marks currently defined, as a list
+"     redir => cout
+"     silent marks ABCDEFGHIJKLMNOPQRSTUVWXYZ
+"     redir END
+
+"     let marks_list_text = split(cout, "\n")
+"     " The first line is a header, so we skip that
+"     let marks_list = map(marks_list_text[1:], 's:extract_mark(v:val)')
+"     return marks_list
+" endfunction
+
+" function! s:get_last_defined_mark()
+"     " What is the last mark sequentially defined by the user?
+"     let marks_list = s:marks_list()
+"     return char2nr(marks_list[-1])
+" endfunction
+
+" function! AppendMark()
+"     " Append a mark to the end of the marks list at the current position in the current file
+"     let last_defined_mark = s:get_last_defined_mark()
+"     let next_mark = last_defined_mark + 1
+"     execute "normal! m" . nr2char(next_mark)
+" endfunction
+" command! AppendMark call AppendMark()
+" nnoremap <leader>ma :call AppendMark()<CR>
+
+" function! CycleMarks()
+"     " Cycle through the defined marks, looping around 
+
+"     " Init the first time through. 65 = the letter "A"
+"     if !exists("g:last_mark")
+"         let g:last_mark = 65
+"     endif
+
+"     let last_defined_mark = s:get_last_defined_mark()
+
+"     let next_mark = g:last_mark + 1
+
+"     " cycle around at the end of the last defined mark
+"     " cycle around at the end of the alphabet
+"     " TODO: next_mark > 90 is redundant? because the last_defined_mark can't
+"     " ever be anything greater than Z.
+"     if next_mark > last_defined_mark || next_mark > 90
+"         let next_mark = 65
+"     endif
+
+"     " Jump to the next mark
+"     execute "normal! '" . nr2char(next_mark)
+
+"     let g:last_mark = next_mark
+
+" endfunction
+" command! CycleMarks call CycleMarks()
+" nnoremap <c-m> :call CycleMarks()<CR>
+
+
+
+
+
+
+
+
+" function! VarExampleFunction()
+" python << endPython
+
+" import vim
+
+" def working_with_vars():
+"     # Check if a variable exists
+"     eval_value = int(vim.eval('exists("g:example_global_var")'))
+"     if eval_value:
+"         print("The variable is defined => {}".format(eval_value))
+"     else:
+"         print("The variable is not defined => {}".format(eval_value))
+
+" working_with_vars()
+
+" endPython
+" endfunction
+
+" command! VarExample call VarExampleFunction()
+
 " source ~/.vim/dunkpytest.vim
