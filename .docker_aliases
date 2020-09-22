@@ -24,6 +24,7 @@ dwn       watch not running containers
 Images
 ----
 di        list all images
+dis       list all images, short form, handy for copy-paste
 dirm      remove a specified image
 dh        show the history for an image
 dcln      clean up orphaned images with no tag
@@ -42,6 +43,7 @@ DOCKER_PSFORMAT_NAMES_ONLY='{{.Names}}'
 # A few useful aliases
 alias d='docker'
 alias di='docker images'
+alias dis='docker images --format "{{.Repository}}:{{.Tag}}"'
 alias dirm='docker rmi'
 alias fig='docker-compose'
 alias dhst='docker history'
