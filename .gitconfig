@@ -28,8 +28,8 @@
 	trustExitCode = true
 [pull]
     rebase = true
-[merge]
-     conflictstyle = diff3
+; [merge]
+     ; conflictstyle = diff3
 [alias]
     fp = fetch --prune
     ca = commit --amend --no-edit
