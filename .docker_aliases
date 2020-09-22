@@ -17,7 +17,7 @@ de        drop into a shell on a container
 dv        list all volumes
 dvrm      remove a volume
 dvrma     remove ALL volumes
-drun      run an ephemeral ubuntu container
+run       run an ephemeral ubuntu container
 dfailed   examine a failed container
 dwn       watch not running containers
 
@@ -26,7 +26,6 @@ Images
 di        list all images
 dirm      remove a specified image
 dh        show the history for an image
-dr        run an image in an ephemeral container
 dcln      clean up orphaned images with no tag
 
 Assorted
@@ -89,11 +88,29 @@ function drma() {
 
 # Clean up untagged images
 function dcln() {
+    # TODO: use docker images --filter "dangling=true"
     docker rmi $(docker images | grep "^<none>" | tr -s " " | cut -d" " -f3)
 }
 
-# Run a quick, ephemeral ubuntu container
-alias drun='docker run -it --rm ubuntu bash'
+function run() {
+
+    local image docker_command
+
+    if [ $# -ne 1 ]; then
+        echo "Usage: run [image]"
+        return
+    fi
+
+    image="$1"
+
+    if docker run -it --rm "${image}" sh -c "type bash" > /dev/null;
+    then
+        docker_command="cd /hostdir && bash"
+    else
+        docker_command="cd /hostdir && sh"
+    fi
+    docker run -v "$(pwd)":/hostdir -it --rm "${image}" sh -c "${docker_command}"
+}
 
 # Container statistics across all containers
 function dstat() {
