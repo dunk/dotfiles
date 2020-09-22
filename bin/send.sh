@@ -13,7 +13,7 @@ commit_message=$(git log --format=%s -n 1 "${commit}")
 # Convert the commit message into a suitable branch name
 branch_name=$(echo "$commit_message" | \
     tr '[:upper:]' '[:lower:]' | \
-    tr ' ' '_' | \
+    tr ' ' '-' | \
     tr -d "'")
 
 # Translate the memorable username into the corresponding gitlab user id
