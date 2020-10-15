@@ -79,6 +79,8 @@ alias g='git'
 alias v='vim'
 alias vom='vim'
 alias vin='vim'
+alias vin='vim'
+alias cim='vim'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
