@@ -45,8 +45,12 @@
     l = log --oneline -10
     ll = log
     gr = log --graph --oneline --all
+
     bd = branch -D
     bdo = push origin --delete
+    bdb = !git push origin --delete $1 && git branch -D
+    bda = !git push origin --delete $1 && git branch -D
+
     su = submodule update --init
     staash = stash --include-untracked
     cane = commit --amend --no-edit
