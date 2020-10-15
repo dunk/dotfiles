@@ -1,20 +1,26 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
-    echo "Usage: send [commit] [reviewer]"
+function usage() {
+    echo "Usage: send [reviewer]"
+    echo "Usage: send [reviewer] [commit]"
+    echo "[reviewer] == [marco|neil|dunk|cody|lukasz|vikas|sam|tom]"
+}
+
+# This script can be called in 1 and 2 argument forms only
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    usage
     exit 1
 fi
 
+# In 1 arg form we use the last commit in this branch
+if [ $# -eq 1 ]; then
+    # echo "Using the last commit in this branch"
+    commit=$(git log --reverse -1 --pretty="format:%h")
+else
+    commit="$2"
+fi
 
-commit="$1"
-reviewer="$2"
-# Get the commit message from the commit - just the one-line summary
-commit_message=$(git log --format=%s -n 1 "${commit}")
-# Convert the commit message into a suitable branch name
-branch_name=$(echo "$commit_message" | \
-    tr '[:upper:]' '[:lower:]' | \
-    tr ' ' '-' | \
-    tr -d "'")
+reviewer="$1"
 
 # Translate the memorable username into the corresponding gitlab user id
 if [ "${reviewer}" == "marco" ]; then
@@ -34,14 +40,24 @@ elif [ "${reviewer}" == "sam" ]; then
 elif [ "${reviewer}" == "tom" ]; then
     reviewer_id=56
 else
-    echo "Unrecognised user"
-    return
+    echo -e "Unrecognised reviewer\n"
+    usage
+    exit 1
 fi
 
-set -ex
+# Get the commit message from the commit - just the one-line summary
+commit_message=$(git log --format=%s -n 1 "${commit}")
+
+# Convert the commit message into a suitable branch name
+branch_name=$(echo "$commit_message" | \
+    tr '[:upper:]' '[:lower:]' | \
+    tr ' ' '-' | \
+    tr -d "'")
+
+# set -ex
 
 # echo "**** STASH ANY LOCAL WORK ****"
-git stash
+GIT_STASH_OUTPUT="$(git stash)"
 
 # echo "Creating branch $branch_name with $commit on it and message: '$commit_message', then creating an MR and assigning it to $reviewer"
 
@@ -55,12 +71,14 @@ git cherry-pick "${commit}"
 git push -u origin "$branch_name"
 
 # echo "**** CREATE A MERGE REQUEST ASSINGED TO THE SUPPLIED REVIEWER****"
-/Users/dgordon/bin/gitlab/venv/bin/python -c "import gitlab; gitlab.Gitlab.from_config('researchexchange').projects.get(54).mergerequests.create({'source_branch': '$branch_name', 'target_branch': 'master', 'title': '$commit_message', 'assignee_id': $reviewer_id})"
+MERGE_REQUEST_ID=$(/Users/dgordon/bin/gitlab/venv/bin/python -c "import gitlab; print(gitlab.Gitlab.from_config('researchexchange').projects.get(54).mergerequests.create({'source_branch': '$branch_name', 'target_branch': 'master', 'title': '$commit_message', 'assignee_id': $reviewer_id}).get_id())")
 
 # echo "**** SWITCH BACK TO THE ORIGINAL BRANCH ****"
 git co -
 
 # echo "**** POP THE STASH ****"
-git stash pop
+[ "$GIT_STASH_OUTPUT" != "No local changes to save" ] && git stash pop
 
-set +ex
+echo "Merge request URL is: https://gitlab.rsrchx.org/researchexchange/rex/-/merge_requests/${MERGE_REQUEST_ID}"
+
+# set +ex
