@@ -119,6 +119,9 @@ autocmd FileType gitcommit,markdown,mkd,rst setlocal spell nonumber norelativenu
 " with relative number (https://github.com/vim/vim/issues/282)
 autocmd Filetype ruby set norelativenumber
 
+" Set text width for use with gqip (etc), matching Black default line length
+autocmd Filetype python set textwidth=88
+
 " Nuke numbers (for better copy-paste)
 " TODO: also turn off git markers
 nnoremap <leader>nn :set number! relativenumber!<CR>
