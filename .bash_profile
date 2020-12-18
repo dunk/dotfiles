@@ -401,3 +401,7 @@ complete -W "\`grep -oE '^[a-zA-Z0-9_.-]+:([^=]|$)' ?akefile | sed 's/[^a-zA-Z0-
 alias bp='source ~/.bash_profile'
 
 [ -f ~/.bash_local ] && source ~/.bash_local
+
+# Make editing these quicker
+alias brc='vim ~/.bash_profile && source ~/.bash_profile'
+alias bl='vim ~/.bash_local && source ~/.bash_local'
