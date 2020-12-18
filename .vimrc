@@ -188,6 +188,7 @@ call plug#begin('~/.vim/plugged')
     """""""" Git
     source ~/.vim/gitgutter.vim
     source ~/.vim/fugitive.vim
+    source ~/.vim/fugitive-gitlab.vim
     Plug 'tpope/vim-rhubarb'
 
     """""""" Docker
