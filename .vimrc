@@ -163,6 +163,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-repeat'
     source ~/.vim/togglelist.vim
     Plug 'christoomey/vim-sort-motion'
+    Plug 'godlygeek/tabular'
+    Plug 'justinmk/vim-sneak'
 
     """""""" Code
     Plug 'gorkunov/smartpairs.vim'
