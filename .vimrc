@@ -1,4 +1,4 @@
-set nocompatible encoding=utf-8 directory=~/.vim/tmp backup backupdir=~/.vim/backup undofile undodir=~/.vim/undo hlsearch ignorecase smartcase expandtab tabstop=4 shiftwidth=4 incsearch number relativenumber noerrorbells ruler hidden showcmd background=dark cursorline wildchar=<Tab> wildmenu wildmode=full wildcharm=<c-z> wildignore+=*.pyc background=dark backspace=indent,eol,start
+set nocompatible encoding=utf-8 directory=~/.vim/tmp backup backupdir=~/.vim/backup undofile undodir=~/.vim/undo hlsearch ignorecase smartcase expandtab tabstop=4 shiftwidth=4 incsearch noerrorbells ruler hidden showcmd background=dark cursorline wildchar=<Tab> wildmenu wildmode=full wildcharm=<c-z> wildignore+=*.pyc background=dark backspace=indent,eol,start
 
 syntax on
 colorscheme dunk
