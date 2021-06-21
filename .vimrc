@@ -122,6 +122,10 @@ autocmd Filetype ruby set norelativenumber
 " Set text width for use with gqip (etc), matching Black default line length
 autocmd Filetype python set textwidth=88
 
+" Use isort directly because vim-isort is b0rken
+" autocmd BufWritePost *.py :!isort %
+autocmd BufWritePost *.py :silent exec "!isort %" | :edit
+
 " Nuke numbers (for better copy-paste)
 " TODO: also turn off git markers
 nnoremap <leader>nn :set number! relativenumber!<CR>
@@ -177,7 +181,8 @@ call plug#begin('~/.vim/plugged')
     """""""" Python
     Plug 'kana/vim-textobj-user'
     Plug 'bps/vim-textobj-python'
-    Plug 'fisadev/vim-isort'
+    " This doesn't work anymore - calling isort directly instead now
+    " Plug 'fisadev/vim-isort'
     " Plug 'stsewd/isort.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'psf/black'
 
