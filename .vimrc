@@ -180,6 +180,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-surround'
     Plug 'kburdett/vim-nuuid'
     Plug 'sbdchd/neoformat'
+    source ~/.vim/test.vim
+    Plug 'preservim/vimux'
 
     """""""" Python
     Plug 'kana/vim-textobj-user'
