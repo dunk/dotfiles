@@ -140,7 +140,7 @@ endfunction
 " Close a buffer without messing with the windows.
 nnoremap <silent> <leader>q :bp\|bd #<CR>
 
-nnoremap <leader>aa :Ag <c-r><c-w><cr>
+nnoremap <leader>f :Ag <c-r><c-w><cr>
 
 " augroup fmt
 "   autocmd!
