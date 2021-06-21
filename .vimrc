@@ -165,6 +165,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'christoomey/vim-sort-motion'
     Plug 'godlygeek/tabular'
     Plug 'justinmk/vim-sneak'
+    Plug 'liuchengxu/vim-which-key'
 
     """""""" Code
     Plug 'gorkunov/smartpairs.vim'
@@ -218,6 +219,8 @@ call plug#begin('~/.vim/plugged')
     " Plug 'Shougo/neocomplete.vim'
     " Plug 'alfredodeza/pytest.vim'
 call plug#end()
+
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 
 " function! s:extract_mark(line)
 "     " Marks show up in the second character from the left, so extract this
