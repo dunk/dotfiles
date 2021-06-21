@@ -46,7 +46,7 @@ nnoremap <c-b> <c-b>zz
 nnoremap <BS> `.
 
 " Easier access to command mode
-nnoremap ; :
+" nnoremap ; :
 
 " Make Y behave like C and D
 nnoremap Y y$
