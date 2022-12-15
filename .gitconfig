@@ -1,96 +1,57 @@
-; [credential]
-     ; helper = osxkeychain
 [core]
-    ; pager = diff-highlight | diff-so-fancy | less --tabs=1,5 -R
-	excludesfile = ~/.gitignore_global
-	pager = diff-so-fancy | less --tabs=4 -RFX
-    ; pager = diff-so-fancy | less --tabs=4 -RFXS --pattern '^(Date|added|deleted|modified): '
-; [pager]
-  ; add      = true
-  ; diff     = true
-  ; difftool = true
-  ; log      = true
-  ; show     = true
+    excludesfile = ~/.gitignore_global
+    pager = diff-so-fancy | less --tabs=4 -RFX
+
 [color]
-    ui = auto
-[color "diff"]
-	meta = 11
-	frag = magenta bold
-	old = red bold
-	new = green bold
-	commit = yellow bold
-	whitespace = red reverse
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+    ui = true
+
 [pull]
     rebase = true
-; [merge]
-     ; conflictstyle = diff3
+
+[commit]
+    verbose = true
+
+[init]
+	defaultBranch = main
+
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    func = 146 bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+
 [alias]
     fp = fetch --prune
-    ca = commit --amend --no-edit
+    fix = commit --amend --no-edit
     co = checkout
     cb = checkout -b
     st = status --short
-    sh = show
+    s = show
     cp = cherry-pick
     pu = !git push -u origin $(git symbolic-ref --short HEAD)
-    graph = log --graph --all --decorate --stat --date=iso
-    b = branch --all -vv
     sl = stash list
-    l = log --oneline -10
-    ll = log
-    gr = log --graph --oneline --all
+    move = branch -m
 
     bd = branch -D
     bdo = push origin --delete
-    bdb = !git push origin --delete $1 && git branch -D
     bda = !git push origin --delete $1 && git branch -D
 
-    su = submodule update --init
     staash = stash --include-untracked
-    cane = commit --amend --no-edit
     files = show --pretty="" --name-only
     stats = shortlog -s -n
-    fixup = commit --amend --no-edit
     undohard = reset --hard HEAD~1
     shoe = show
     pop =  reset HEAD~
     unstage =  reset
 
     mylog= log --no-merges --pretty="format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset)%n%s%n%n%b%n"
-    mymylog= !"git log --no-merges --author='Duncan Gordon' --pretty='format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset)%n%s%n%n%b%n'"
-
-    lg = !"git lg1"
-    lg1 = !"git lg1-specific --all"
-    lg2 = !"git lg2-specific --all"
-    lg3 = !"git lg3-specific --all"
-
-    lg1-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
-    lg2-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
-    lg3-specific = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)'
-[commit]
-    verbose = true
-[filter "lfs"]
-    clean = git-lfs clean %f
-    smudge = git-lfs smudge %f
-    required = true
-[user]
-	name = Duncan Gordon
-	email = dgordon@liquidnet.com
-; [diff]
-    ; tool = meld
-; [difftool]
-    ; prompt = false
-; [difftool "meld"]
-  ; trustExitCode = true
-  ; cmd = open -W -a Meld --args \"$LOCAL\" \"$REMOTE\"
-[color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+    me= !"git log --no-merges --author='Duncan Gordon' --pretty='format:%<(11)%C(yellow)%h%C(reset)%<(20)%C(green)%an%C(reset)%n%s%n%n%b%n'"
