@@ -11,9 +11,8 @@ let mapleader=" "
 " key, so instead map it to repeat-macro
 :map , @@
 
-" Remap capital W, because I typo this **all the time**
+" Remap common typos for a better experience
 command! W w
-" And the rest
 command! WQ wq
 command! Wq wq
 command! Q q
@@ -122,9 +121,12 @@ autocmd Filetype ruby set norelativenumber
 " Set text width for use with gqip (etc), matching Black default line length
 autocmd Filetype python set textwidth=88
 
+" Quick access to pydoc in python files
+autocmd Filetype python setlocal keywordprg=pydoc
+
 " Use isort directly because vim-isort is b0rken
 " autocmd BufWritePost *.py :!isort %
-autocmd BufWritePost *.py :silent exec "!isort %" | :edit
+" autocmd BufWritePost *.py :silent exec "!isort %" | :edit
 
 " Nuke numbers (for better copy-paste)
 " TODO: also turn off git markers
@@ -186,9 +188,6 @@ call plug#begin('~/.vim/plugged')
     """""""" Python
     Plug 'kana/vim-textobj-user'
     Plug 'bps/vim-textobj-python'
-    " This doesn't work anymore - calling isort directly instead now
-    " Plug 'fisadev/vim-isort'
-    " Plug 'stsewd/isort.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'psf/black'
 
     """""""" JS
@@ -313,3 +312,8 @@ nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 " command! VarExample call VarExampleFunction()
 
 " source ~/.vim/dunkpytest.vim
+"
+
+let g:ale_python_flake8_options = '--max-line-length=88'
+let b:ale_fixers = ['black', 'isort']
+let b:ale_fix_on_save = 1
