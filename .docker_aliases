@@ -90,7 +90,7 @@ function drma() {
 
 # Clean up untagged images
 function dcln() {
-    docker rmi $(docker images --filter "dangling=true" --format "{{.ID}}")
+    docker image prune --force
 }
 
 function run() {
