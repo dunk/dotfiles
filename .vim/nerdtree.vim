@@ -4,7 +4,7 @@ Plug 'scrooloose/nerdtree'
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " let NERDTreeIgnore=['\.pyc$', '.DS_Store']
-let NERDTreeIgnore=['__pycache__']
+let NERDTreeIgnore=['^__pycache__$', '^.git$', '^.mypy_cache$', '^venv$', '^.pytest_cache$', '^venv-for-vim$']
 let g:NERDTreeRespectWildIgnore=1
 let g:NERDTreeShowHidden=1
 let g:NERDTreeShowBookmarks=1
