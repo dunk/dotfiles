@@ -42,7 +42,6 @@ alias brc='vim ~/.bash_profile && source ~/.bash_profile'
 alias bl='vim ~/.bash_local && source ~/.bash_local'
 alias bp='source ~/.bash_profile'
 
-alias apt-get='sudo apt-get'
 alias ac='apt-cache search --names-only'
 
 alias ls='ls -G'
